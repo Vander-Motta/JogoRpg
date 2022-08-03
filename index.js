@@ -26,7 +26,7 @@ class Sprite {
 
    draw(){
         //c.drawImage(this.imagem, -785, -650)
-        c.drawImage(this.mapa, -217, -860)
+        c.drawImage(this.mapa, this.posicao.x, this.posicao.y)
    }
 
 
@@ -35,8 +35,8 @@ class Sprite {
 
 const fundo = new Sprite({
         posicao: {
-           x: -785,
-           y: -650
+           x: -215,
+           y: -850
         },
         mapa: mapa
 })
@@ -44,8 +44,17 @@ const fundo = new Sprite({
 
 const keys = {
         w: {
-           pressionado: false     
+              pressionado: false     
         },
+        s: {
+              pressionado: false     
+        },
+        a: {
+              pressionado: false     
+        },
+        d: {
+              pressionado: false
+        }
 
         
 }
@@ -69,6 +78,10 @@ function animação (){
                 //tamanho real do personagem na tela
                  
         )
+     if(keys.w.pressionado)fundo.posicao.y += 3
+     else if(keys.a.pressionado)fundo.posicao.x += 3
+     else if(keys.s.pressionado)fundo.posicao.y -=3
+     else if(keys.d.pressionado)fundo.posicao.x -=3 
 }
 animação()
 
@@ -78,15 +91,35 @@ window.addEventListener('keydown', (e) => {
                 keys.w.pressionado = true
                 break
         case 's':
-                console.log('pressionou s');
+                keys.s.pressionado = true
                 break
         case 'a':
-                console.log('pressionou a');
+                keys.a.pressionado = true
                 break 
         case 'd':
-                 console.log('pressionou d');
+                keys.d.pressionado = true 
                 break               
       }
 })
 
 
+
+window.addEventListener('keyup', (e) => {
+        switch (e.key) {
+          case 'w':
+                  keys.w.pressionado = false
+                  break
+          case 's':
+                  keys.s.pressionado = false
+                  break
+          case 'a':
+                  keys.a.pressionado = false
+                  break 
+          case 'd':
+                  keys.d.pressionado = false
+                  break               
+        }
+  })
+
+
+console.log(keys)
