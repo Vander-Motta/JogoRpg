@@ -4,10 +4,43 @@ const c = canvas.getContext('2d');
 canvas.width = 1024 ;
 canvas.height = 576;
 
-c.fillStyle = 'white';
-c.fillRect(0, 0, canvas.width, canvas.height)
+const colisaoMapa = []
+for (let i = 0; i < colisao.length; i += 70){
+   colisaoMapa.push(colisao.slice(i, 70 + i));
+ }
+
+
+ class limite {
+        static width = 48
+        static height = 48
+      constructor({posicao}){
+      this.posicao = posicao
+      this.width = 48
+      this.height = 48
+      }
+
+      draw(){
+        c.fillStyle ='red'
+        c.fillRect(this.posicao.x, this.posicao.y, this.width, this.height)
+      }
+ }
 
 //Primeiro Bloco de configuração de tela
+const limites = []
+const deslocamento = {
+        x: -16,
+        y: -540
+}
+
+
+colisaoMapa.forEach((row, i) => {
+    row.forEach((symbol, j) =>  {
+        if(symbol === 1025)
+        limites.push()
+        
+    })
+})
+
 
 
 const personagemjogador = new Image()
@@ -27,6 +60,22 @@ class Sprite {
    draw(){
         //c.drawImage(this.imagem, -785, -650)
         c.drawImage(this.mapa, this.posicao.x, this.posicao.y)
+        c.drawImage(personagemjogador,
+                0,
+                0,
+                personagemjogador.width / 4,
+                personagemjogador.height,
+                
+                canvas.width / 2 - (personagemjogador.width / 4) / 2, //posição x
+                canvas.height  / 2 - personagemjogador.height / 2, //posição y
+
+
+                personagemjogador.width / 4,
+                personagemjogador.height
+                //tamanho real do personagem na tela
+                 
+        )
+
    }
 
 
@@ -35,8 +84,8 @@ class Sprite {
 
 const fundo = new Sprite({
         posicao: {
-           x: -215,
-           y: -850
+           x: deslocamento.x,
+           y: deslocamento.y
         },
         mapa: mapa
 })
@@ -59,31 +108,49 @@ const keys = {
         
 }
 
+const testeLimite = new limite({
+        posicao: {
+           x: 400,
+           y: 400     
+        }
+})
 
+
+const moveis = [fundo, testeLimite]
 function animação (){
        window.requestAnimationFrame(animação)
     fundo.draw()
-    c.drawImage(personagemjogador,
-                0,
-                0,
-                personagemjogador.width / 4,
-                personagemjogador.height,
-                
-                canvas.width / 2 - (personagemjogador.width / 4) / 2, //posição x
-                canvas.height  / 2 - personagemjogador.height / 2, //posição y
-
-
-                personagemjogador.width / 4,
-                personagemjogador.height
-                //tamanho real do personagem na tela
-                 
-        )
-     if(keys.w.pressionado)fundo.posicao.y += 3
-     else if(keys.a.pressionado)fundo.posicao.x += 3
-     else if(keys.s.pressionado)fundo.posicao.y -=3
-     else if(keys.d.pressionado)fundo.posicao.x -=3 
+   // limites.forEach(limite => {
+       // limite.draw()
+  //  })
+  testeLimite.draw()
+    
+     //if(personagemjogador.posicao.x + personagemjogador.width)  
+        
+     if(keys.w.pressionado){
+          moveis.forEach((movel) => {
+            movel.posicao.y +=2
+          })
+        }       
+     else if(keys.a.pressionado){
+        moveis.forEach((movel) => {
+                movel.posicao.x +=2
+              })
+       
+        }
+     else if(keys.s.pressionado){
+        moveis.forEach((movel) => {
+                movel.posicao.y -=2
+              })
+        }
+     else if(keys.d.pressionado){
+        moveis.forEach((movel) => {
+                movel.posicao.x -=2
+              })
+        }
 }
 animação()
+
 
 window.addEventListener('keydown', (e) => {
       switch (e.key) {
@@ -122,4 +189,3 @@ window.addEventListener('keyup', (e) => {
   })
 
 
-console.log(keys)
