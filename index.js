@@ -51,7 +51,16 @@ colisaoMapa.forEach((row, i) => {
 
 
 const personagemjogador = new Image()
-personagemjogador.src='./Imagens/playerDown.png'
+personagemjogador.src='./Imagens/playerDown.png'   //down
+
+const personagemjogadorUp = new Image()
+personagemjogadorUp.src='./Imagens/playerUp.png'
+
+const personagemjogadorLeft = new Image()
+personagemjogadorLeft.src='./Imagens/playerLeft.png'
+
+const personagemjogadorRight = new Image()
+personagemjogadorRight.src='./Imagens/playerRight.png'
 
 const mapa = new Image()
 mapa.src = './Imagens/maparpg.png'
@@ -59,10 +68,10 @@ mapa.src = './Imagens/maparpg.png'
 //Segundo Bloco seleciona o mapa e o personagem e salva em constante
 
 class Sprite {
-   constructor({posicao, velocidade, mapa, frames = {max: 1} }) {
+   constructor({posicao, velocidade, mapa, frames = {max: 1}, sprites }) {
         this.posicao = posicao
         this.mapa = mapa
-        this.frames = frames
+        this.frames = {...frames, val: 0, elapsed: 0}
         
 
         this.mapa.onload = () =>{
@@ -71,14 +80,15 @@ class Sprite {
            console.log(this.width),
            console.log(this.height) 
         }
-        
+       this.movimento = false
+       this.sprites = sprites 
    }
 
    draw(){
         //c.drawImage(this.imagem, -785, -650)
         //c.drawImage(this.mapa, this.posicao.x, this.posicao.y)
         c.drawImage(this.mapa,
-                0,
+                this.frames.val * this.width,
                 0,
                 this.mapa.width / this.frames.max,
                 this.mapa.height,
@@ -89,7 +99,16 @@ class Sprite {
                 //tamanho real do personagem na tela
                  
         )
-
+        if(!this.movimento) return
+        if (this.frames.max > 1){
+            this.frames.elapsed++
+        }        
+        if(this.frames.elapsed % 13 === 0){
+        if(this.frames.val < this.frames.max -1 ) this.frames.val++   
+        else this.frames.val = 0   
+        } 
+        
+        
    }
 
 
@@ -106,6 +125,12 @@ const jogador = new Sprite({
     mapa: personagemjogador,
     frames:{
         max: 4
+    },
+    sprites:{
+     up: personagemjogadorUp,
+     down: personagemjogador,
+     left: personagemjogadorLeft,
+     rigth: personagemjogadorRight    
     }    
 })        
 const fundo = new Sprite({
@@ -161,7 +186,10 @@ function animação (){
   ///testeLimite.draw()
   jogador.draw()
     let movimento = true
+    jogador.movimento = false
       if(keys.w.pressionado){
+        jogador.movimento=true
+        jogador.mapa = jogador.sprites.up
           for (let i = 0; i < limites.length; i++){
              const Limite = limites [i]
            if(
@@ -185,6 +213,8 @@ function animação (){
           })
         }       
      else if(keys.a.pressionado){
+        jogador.movimento=true
+        jogador.mapa = jogador.sprites.left
         for (let i = 0; i < limites.length; i++){
                 const Limite = limites [i]
               if(
@@ -209,6 +239,8 @@ function animação (){
        
         }
      else if(keys.s.pressionado){
+        jogador.movimento=true
+        jogador.mapa = jogador.sprites.down
         for (let i = 0; i < limites.length; i++){
                 const Limite = limites [i]
               if(
@@ -232,6 +264,8 @@ function animação (){
               })
         }
      else if(keys.d.pressionado){
+        jogador.movimento=true
+        jogador.mapa = jogador.sprites.rigth
         for (let i = 0; i < limites.length; i++){
                 const Limite = limites [i]
               if(
