@@ -15,8 +15,8 @@ for (let i = 0; i < colisao.length; i += 70){
         static height = 48 
       constructor({posicao}){
       this.posicao = posicao
-      this.width = 48
-      this.height = 48
+      this.width = 10
+      this.height = 10
       }
 
       draw(){
@@ -25,11 +25,11 @@ for (let i = 0; i < colisao.length; i += 70){
       }
  }
 
-//Primeiro Bloco de configuração de tela
+
 const limites = []
 const deslocamento = {
         x: -16,
-        y: -570
+        y: -540
 }
 
 
